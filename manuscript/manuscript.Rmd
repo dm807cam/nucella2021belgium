@@ -534,4 +534,8 @@ In addition to buffering OA effects, coastal eutrophication may have had an addi
 To summarize, observed shell layer thickening in archival *N. lapillus* from the Belgian and Dutch coasts appears to result from the interaction of multiple abiotic and biotic conditions that provided favourable conditions for shell formation throughout the last 130 years. Increasing annual temperatures and extended annual calcification windows provided better kinetic conditions for primary shell production and longer annual periods for secondary shell layer thickening. In addition, anthropogenically induced eutrophication mitigated OA effects maintaining high carbonate saturation states at the Belgian coast. Anecdotal evidence points towards a possible influence of enhanced prey abundance on shell formation rates due to the eutrophication and the rapid spreading of the alien barnacle species *A. modestus* on the Belgian coast since the 1950s.
 Our findings suggest that although OA and climate change threaten global ecosystems, their spatial proliferation can be patchy creating niches with environmental conditions favourable for marine calcifiers like *N. lapillus*. This gives hope that within these niches marine calcifiers may survive predicted future OA scenarios longer than expected, extending the point of no return into the future. 
 
+# Data availability
+
+All data and code used in this study are made publicly available on the following git repository: [dm807cam/nucella2021belgium](https://github.com/dm807cam/nucella2021belgium).
+
 # References
