@@ -1,0 +1,368 @@
+---
+title: "Supplementary Material for: **Thriving in a changing world: A 130 years shell record of an intertidal predator from the Southern North Sea.**"
+author: "Mayk et al."
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("tidyverse")
+library("mgcv")
+library("Momocs")
+library("prmisc")
+library("kableExtra")
+```
+
+$\pagebreak$
+
+# Datasets
+## Dataset I - Air Temperature, Sea Surface Temperature, Wind speed
+**Dataset name:**
+    International Comprehensive Ocean-Atmosphere Data Set (ICOADS) Release 3, Monthly Summaries. [1]
+    
+**Dataset identifier:**
+    ds548.1
+    
+**Link:**
+    https://rda.ucar.edu/datasets/ds548.1
+    
+**Dataset summary:**
+    The International Comprehensive Ocean-Atmosphere Data Set (ICOADS) is a global ocean marine meteorological and surface ocean dataset. It is formed by merging many national and international data sources that contain measurements and visual observations from ships (merchant, navy, research), moored and drifting buoys, coastal stations, and other marine platforms. The coverage is global and sampling density varies depending on date and geographic position relative to shipping routes and ocean observing systems. Observations (22 observed and computed parameters) taken in each month for a given spatial latitude by longitude box are statistically summarized (e.g. mean, median, number of observations, etc) and NOT interpolated or analyzed to fill data voids.
+
+**Spatial resolution:**
+    Global with a resolution of 2-degree (since 1800) and 1-degree (since 1960)
+
+**Temporal range:**
+    01.01.1800 to 31.03.2021
+
+**Accessed:**
+    08.07.2020
+
+
+## Dataset II - Salinity
+**Dataset name:**
+    ICES Surface/underway/pump Data [2]
+
+**Dataset identifier:**
+    Surf 2161
+
+**Link:**
+    https://ocean.ices.dk/data/surface/Surf2161.zip
+
+**Dataset summary:**
+    Compilation of ocean hydrographic data collected at depths <10 m by different instruments such as CTD, bottle, towed, pump, buoys and moorings. Data are available from 1877 to 2021.
+
+**Spatial resolution:**
+    48 - 54 degrees (latitudinal) and -8 - 4 degrees (longitudinal)
+
+**Temporal range:**
+    10.11.1902 - 14.02.2021
+
+**Accessed:**
+    01.05.2021
+
+$\pagebreak$
+
+# Tables
+**Table 1: Details of the *Nucella lapillus* shells used in this study from the museum collection of the Royal Belgian Institute of Natural Sciences.** 
+For each sampling year the sampling site with its respective site code as used throughout the text, the storage conditions (i.e., whether samples were stored dry or in ethanol), number of specimens and their respective mean shell height $\pm$ one standard deviation. Only specimens with clearly identifiable collection year and collection site were used.
+```{r results='asis', message=FALSE, echo=FALSE, warning=FALSE}
+nucella_shape <- read_delim("../data/shell/shell_shape.csv")
+
+# Reduce data frame to table for supplementary material
+nucella_shape %>%
+  group_by(year, location) %>%
+  summarise(
+    storage_condition = storage_condition[1],
+    n = n(),
+    mean_shell_height = round(mean(shell_height, na.rm = T), 2),
+    sd_shell_height = round(sd(shell_height, na.rm = T), 2)
+  ) %>%
+  knitr::kable(
+    col.names = c(
+      "sampling year",
+      "location",
+      "storage condition",
+      "number of samples",
+      "avg. shell height (mm)",
+      "var. shell height ($1\\sigma$)"
+    ),
+    escape = F,
+    booktabs = T
+  ) %>%
+  kable_styling(
+    font_size = 11,
+    position = "center",
+    latex_options = c("HOLD_position", "scale_down")
+  )
+```
+
+$\pagebreak$
+
+**Table 2: GAMM summary statistic of environmental descriptor time-series.**
+Summary statistics of the model terms; $f(year)$ - long term variation, $f(month)$ - within year variation and $f(year, month)$ - tensor product smooth of interaction between long term and within year variation.
+``` {r results='asis', message=FALSE, echo=FALSE, warning=FALSE} 
+gamm_air_temp <- readRDS("../data/env/GAMM_air_temp.rds")
+gamm_sea_temp <- readRDS("../data/env/GAMM_sea_temp.rds")
+gamm_wind_speed <- readRDS("../data/env/GAMM_wind_speed.rds")
+
+air_temp <-
+  data.frame(round(anova(gamm_air_temp$gam)$s.table, 3)) %>%
+  rownames_to_column()
+
+sea_temp <-
+  data.frame(round(anova(gamm_wind_speed$gam)$s.table, 3)) %>%
+  rownames_to_column()
+
+wind_speed <-
+  data.frame(round(anova(gamm_wind_speed$gam)$s.table, 3)) %>%
+  rownames_to_column()
+
+tab <- rbind(air_temp, sea_temp, wind_speed)
+for (ii in 1:nrow(tab)) {
+  if (tab$p.value[ii] > 0.001) {
+    tab$p.value[ii] <-
+      tab$p.value[ii]
+  } else {
+    tab$p.value[ii] <- "< 0.001"
+  }
+}
+
+knitr::kable(
+  tab[, -3],
+  col.names = c("terms",
+                "edf",
+                "F",
+                "$p$-value"),
+  escape = F,
+  booktabs = T
+) %>%
+  pack_rows(index = c(
+    "air temperature" = 3,
+    "sea surface temperature" = 3,
+    "wind speed" = 3
+  ))  %>%
+  kable_styling(font_size = 11,
+                position = "center",
+                latex_options = "HOLD_position")
+```
+
+$\pagebreak$
+
+``` {r, message=FALSE, echo=FALSE} 
+belgium_salinity <- read_delim("../data/env/salinity_comp.csv")
+
+comp_loc <- kruskal.test(sal ~ location, data = belgium_salinity)
+
+comp_loc_H <- round(as.numeric(comp_loc[1]), 3)
+comp_loc_df <- as.numeric(comp_loc[2])
+comp_loc_p <- round(as.numeric(comp_loc[3]), 3)
+if (comp_loc_p > 0.001) {
+  comp_loc_p <-
+    paste("=", comp_loc_p, sep = " ")
+} else {
+  comp_loc_p <- "< 0.001"
+}
+```
+**Table 3: Pairwise comparison of salinity regimes between sampling sites.**    
+A Kruskal-Wallis Rank Sum Test indicated significant differences in mean salinity between sampling sites (H(`r comp_loc_df`) = `r comp_loc_H` *p* = `r comp_loc_p`) (Supplementary Figure 4). Results of a Pairwise Wilcoxon Rank Sum Test with Bonferroni adjusted p-values comparing salinity regimes between sampling sites are reported below.
+``` {r results='asis', message=FALSE, echo=FALSE, warning=FALSE} 
+options(knitr.kable.NA = '')
+pair_loc <-
+  pairwise.wilcox.test(belgium_salinity$sal,
+                       belgium_salinity$location,
+                       p.adjust.method = "BH")
+
+knitr::kable(pair_loc$p.value, booktabs = T, digits = 3)  %>%
+  kable_styling(font_size = 11,
+                position = "center",
+                latex_options = "HOLD_position")
+```
+
+$\pagebreak$
+
+**Table 4: GAM summary statistic of selected shell shape and thickness descriptors.**
+Summary statistics of the model terms; $f(year)$ - long term variation, $f(shell height)$ - variation in relation to specimen shell height and $f(location)$ - variation in relation to sampling location is treated as *random-effect* in the models.
+``` {r results='asis', message=FALSE, echo=FALSE, warning=FALSE} 
+m1 <- readRDS("../data/shell/GAM_calcite_thickness.rds")
+m2 <- readRDS("../data/shell/GAM_aragonite_thickness.rds")
+m3 <- readRDS("../data/shell/GAM_aperture_size.rds")
+m4 <- readRDS("../data/shell/GAM_shell_height.rds")
+m5 <- readRDS("../data/shell/GAM_shape_PC1.rds")
+m6 <- readRDS("../data/shell/GAM_shape_PC2.rds")
+m7 <- readRDS("../data/shell/GAM_shape_PC3.rds")
+m8 <- readRDS("../data/shell/GAM_shape_PC4.rds")
+
+m1d <- data.frame(round(anova(m1)$s.table, 3)) %>%
+  rownames_to_column()
+
+m2d <- data.frame(round(anova(m2)$s.table, 3)) %>%
+  rownames_to_column()
+
+m3d <- data.frame(round(anova(m3)$s.table, 3)) %>%
+  rownames_to_column()
+
+m4d <- data.frame(round(anova(m4)$s.table, 3)) %>%
+  rownames_to_column()
+
+m5d <- data.frame(round(anova(m5)$s.table, 3)) %>%
+  rownames_to_column()
+
+m6d <- data.frame(round(anova(m6)$s.table, 3)) %>%
+  rownames_to_column()
+
+m7d <- data.frame(round(anova(m7)$s.table, 3)) %>%
+  rownames_to_column()
+
+m8d <- data.frame(round(anova(m8)$s.table, 3)) %>%
+  rownames_to_column()
+
+tab <- rbind(m1d, m2d, m3d, m4d, m5d, m6d, m7d, m8d)
+
+for (ii in 1:nrow(tab)) {
+  if (tab$p.value[ii] > 0.001) {
+    tab$p.value[ii] <-
+      tab$p.value[ii]
+  } else {
+    tab$p.value[ii] <- "< 0.001"
+  }
+}
+
+tab$rowname <- sub("_", " ", tab$rowname)
+
+knitr::kable(
+  tab[, -3],
+  col.names = c("terms",
+                "edf",
+                "F",
+                "$p$-value"),
+  escape = F,
+  booktabs = T
+) %>%
+  pack_rows(
+    index = c(
+      "calcite layer thicknes" = 3,
+      "aragonite layer thickness" = 3,
+      "aperture size" = 3,
+      "shell height" = 2,
+      "shape-PC1" = 3,
+      "shape-PC2" = 3,
+      "shape-PC3" = 3,
+      "shape-PC4" = 3
+    )
+  ) %>%
+  kable_styling(font_size = 11,
+                position = "center",
+                latex_options = "HOLD_position")
+```
+
+$\pagebreak$
+
+**Table 5: GAM summary statistic of global GAMs modelling the effect of environmental regimes on selected shell characteristics.**
+Summary statistics of the automatically selected model terms ($edf > 0$). Variation in relation to sampling location is treated as *random-effect* in the models.
+``` {r results='asis', message=FALSE, echo=FALSE, warning=FALSE} 
+m1 <- readRDS("../data/GAM_calcite_global.rds")
+m2 <- readRDS("../data/GAM_aragonite_global.rds")
+m3 <- readRDS("../data/GAM_aperture_global.rds")
+m4 <- readRDS("../data/GAM_height_global.rds")
+m5 <- readRDS("../data/GAM_shape_PC1_global.rds")
+m6 <- readRDS("../data/GAM_shape_PC2_global.rds")
+m7 <- readRDS("../data/GAM_shape_PC3_global.rds")
+m8 <- readRDS("../data/GAM_shape_PC4_global.rds")
+
+m1d <- data.frame(round(anova(m1)$s.table, 3)) %>%
+  rownames_to_column() %>%
+  mutate(model = "calcite layer thickness")
+
+m2d <- data.frame(round(anova(m2)$s.table, 3)) %>%
+  rownames_to_column() %>%
+  mutate(model = "aragonite layer thickness")
+
+m3d <- data.frame(round(anova(m3)$s.table, 3)) %>%
+  rownames_to_column() %>%
+  mutate(model = "aperture size")
+
+m4d <- data.frame(round(anova(m4)$s.table, 3)) %>%
+  rownames_to_column() %>%
+  mutate(model = "shell height")
+
+m5d <- data.frame(round(anova(m5)$s.table, 3)) %>%
+  rownames_to_column() %>%
+  mutate(model = "shape-PC1")
+
+m6d <- data.frame(round(anova(m6)$s.table, 3)) %>%
+  rownames_to_column() %>%
+  mutate(model = "shape-PC2")
+
+m7d <- data.frame(round(anova(m7)$s.table, 3)) %>%
+  rownames_to_column() %>%
+  mutate(model = "shape-PC3")
+
+m8d <- data.frame(round(anova(m8)$s.table, 3)) %>%
+  rownames_to_column() %>%
+  mutate(model = "shape-PC4")
+
+tab <- rbind(m1d, m2d, m3d, m4d, m5d, m6d, m7d, m8d)
+
+for (ii in 1:nrow(tab)) {
+  if (tab$p.value[ii] > 0.001) {
+    tab$p.value[ii] <-
+      tab$p.value[ii]
+  } else {
+    tab$p.value[ii] <- "< 0.001"
+  }
+}
+
+tab$rowname <- sub("_", " ", tab$rowname)
+tab$rowname <- sub("ST", "SST", tab$rowname)
+
+tab <- tab %>%
+  select(-3) %>%
+  filter(edf > 0)
+
+knitr::kable(
+  tab[, -5],
+  col.names = c("terms",
+                "edf",
+                "F",
+                "$p$-value"),
+  escape = F,
+  booktabs = T,
+  longtable = T
+) %>%
+  pack_rows(index = table(tab$model)) %>%
+  kable_styling(
+    font_size = 11,
+    position = "center",
+    latex_options = c("repeat_header", "HOLD_position"),
+    repeat_header_continued = "\\textit{(continued on next page)}"
+  )
+```
+
+$\pagebreak$
+
+# Figures
+
+```{r results='asis', echo = FALSE, fig.cap = "Mean shell shape panels. (a) Average shell shape variation between sampling sites. Mean shell shape at every sampling site is represented by black lines, red overlay represents the mean shell shape of specimens sampled from Blankenberge (BLA → other sampling sites) for easier comparison. (b) Average shell shape variation throughout the last ~130 years. Mean shell shapes for each sampling year are represented in black, red overlay represents the mean shell shape of specimens collected in 1888 (1888 → subsequent sampling years) for easier comparison."}
+knitr::include_graphics("../plots/sup_figure_1.pdf")
+```
+
+$\pagebreak$
+
+```{r results='asis', echo = FALSE, fig.cap = "Salinity regime comparison between sampling sites. Salinity was expected to be more variable between sampling sites than sampling years. We thus compared salinity regimes between sampling sites rather than sampling years. (a) Sampling map with locations of ICES salinity data used in this study. Point colour refers to the median salinity of all salinity measurements available for that location and point size refers to the number of measurements available for that location. Bathymetry data obtained from GEBCO (https://www.gebco.net). (b) Boxplot of all available salinity data for each sampling site. Timespans encompassed in the data are reported above each boxplot. Abbreviations: BLA: Blankenberge; DUI: Duinbergen; KNO: Knokke; OST: Oostende; ZEE: Zeebrugge; ZOU: Zoutelande; ZWA: Zwarte Polder."}
+knitr::include_graphics("../plots/sup_figure_2.pdf")
+```
+
+```{r results='asis', echo = FALSE, fig.cap = "Effect of salinity regime on shell layer thickness. Salinity levels are tightly linked to calcium ion availability and thus can impair calcification rates and with that shell thickening. (a) Aragonite layer thickness in relation to salinity regime at the sampling site. (b) Calcite layer thickness in relation to salinity regime at the sampling site. (c) Calcite to aragonite layer thickness ratio in regard to salinity regimes at the sampling sites. There is no clear relationship between shell layer thickness and salinity regimes."}
+knitr::include_graphics("../plots/sup_figure_3.pdf")
+```
+
+```{r results='asis', echo = FALSE, fig.cap = "Predicted variation of each month for selected environmental descriptors from 1880 to the present. GAMM predictions of the within-year variation of (a) air temperature, (b) sea surface temperature and (c) wind speed. 95% confidence intervals (grey area) are reported for each predictor (dashed lines).  Air and sea surface temperature experienced a steep increase in temperature for all months from 1985 to the present whereas wind speed increased effectively since 1930. Wind speed increased constantly all-over the year by ~3.5 m s-1. The months of December - February show the most pronounced variability of air and sea surface temperature with an increase of ~2 °C since 1880 and ~3 °C since 1920, respectively."}
+knitr::include_graphics("../plots/sup_figure_4.pdf")
+```
+
+$\pagebreak$
+
+```{r echo = FALSE, out.width=480, fig.align = 'left', fig.cap = "Recent photos of wooden and stony break waters of the Belgian and Dutch coast. Photos of breakwater constructions from some of the sampling sites showing high food abundance for Nucella lapillus. (a) Stony breakwater at Oostende showing thick overgrowth of barnacles and oysters. (b) Large boulders at the port entrance of Blankenberg with thick barnacle patches. (c) Easter port mole at Zeebrugge exhibiting densely packed Mytilus population and thick barnacle growth. (d) Stony groynes near Zwarte Polder (NL) showing a large Mytilus population. (e) Wooden groynes near the Memorial Deltawerken (NL) thickly overgrown by barnacles. (f) Individual $\\emph{N. lapillus}$ foraging on a boulder; shells showing a thick overgrowth of barnacles. Photo credit: Martina Mayk (2020)."}
+knitr::include_graphics("../plots/recent_photos.png")
+```
