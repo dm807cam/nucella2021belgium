@@ -34,18 +34,18 @@ m4d$model <- "Calcite thickness"
 m4d$dev_expl <- round(summary(m4)$dev * 100, 0)
 m5d <-
   data.frame(anova(m5)$s.table) %>% rownames_to_column(var = "variables")
-m5d$model <- "Shape PC1"
+m5d$model <- "Shape-PC1"
 m5d$dev_expl <- round(summary(m5)$dev * 100, 0)
 m6d <-
   data.frame(anova(m6)$s.table) %>% rownames_to_column(var = "variables")
-m6d$model <- "Shape PC2"
+m6d$model <- "Shape-PC2"
 m6d$dev_expl <- round(summary(m6)$dev * 100, 0)
 #m7d <- data.frame(anova(m7)$s.table) %>% rownames_to_column(var = "variables")
 #m7d$model <- "Shape PC3"
 #m7d$dev_expl <- round(summary(m1)$dev*100,0)
 m8d <-
   data.frame(anova(m8)$s.table) %>% rownames_to_column(var = "variables")
-m8d$model <- "Shape PC4"
+m8d$model <- "Shape-PC4"
 m8d$dev_expl <- round(summary(m8)$dev * 100, 0)
 
 mod_tab <-
