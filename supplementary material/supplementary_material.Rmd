@@ -165,7 +165,7 @@ if (comp_loc_p > 0.001) {
 }
 ```
 **Table 3: Pairwise comparison of salinity regimes between sampling sites.**    
-A Kruskal-Wallis Rank Sum Test indicated significant differences in mean salinity between sampling sites (H(`r comp_loc_df`) = `r comp_loc_H` *p* = `r comp_loc_p`) (Supplementary Figure 4). Results of a Pairwise Wilcoxon Rank Sum Test with Bonferroni adjusted p-values comparing salinity regimes between sampling sites are reported below.
+A Kruskal-Wallis Rank Sum Test indicated significant differences in mean salinity between sampling sites (H(`r comp_loc_df`) = `r comp_loc_H` *p* = `r comp_loc_p`) (Supplementary Figure 4). Results of a Pairwise Wilcoxon Rank Sum Test with Bonferroni adjusted *p*-values comparing salinity regimes between sampling sites are reported below.
 ``` {r results='asis', message=FALSE, echo=FALSE, warning=FALSE} 
 options(knitr.kable.NA = '')
 pair_loc <-
@@ -363,6 +363,6 @@ knitr::include_graphics("../plots/sup_figure_4.pdf")
 
 $\pagebreak$
 
-```{r echo = FALSE, out.width=480, fig.align = 'left', fig.cap = "Recent photos of wooden and stony break waters of the Belgian and Dutch coast. Photos of breakwater constructions from some of the sampling sites showing high food abundance for Nucella lapillus. (a) Stony breakwater at Oostende showing thick overgrowth of barnacles and oysters. (b) Large boulders at the port entrance of Blankenberg with thick barnacle patches. (c) Easter port mole at Zeebrugge exhibiting densely packed Mytilus population and thick barnacle growth. (d) Stony groynes near Zwarte Polder (NL) showing a large Mytilus population. (e) Wooden groynes near the Memorial Deltawerken (NL) thickly overgrown by barnacles. (f) Individual $\\emph{N. lapillus}$ foraging on a boulder; shells showing a thick overgrowth of barnacles. Photo credit: Martina Mayk (2020)."}
+```{r echo = FALSE, out.width=480, fig.align = 'left', fig.cap = "Recent photos of wooden and stony break waters of the Belgian and Dutch coast. Photos of breakwater constructions from some of the sampling sites showing high food abundance for $\\emph{Nucella lapillus}$. (a) Stony breakwater at Oostende showing thick overgrowth of barnacles and oysters. (b) Large boulders at the port entrance of Blankenberge with thick barnacle patches. (c) Easter port mole at Zeebrugge exhibiting densely packed $\\emph{Mytilus}$ population and thick barnacle growth. (d) Stony groynes near Zwarte Polder (NL) showing a large $\\emph{Mytilus}$ population. (e) Wooden groynes near the Memorial Deltawerken (NL) thickly overgrown by barnacles. (f) Individual $\\emph{N. lapillus}$ foraging on a boulder; shells showing a thick overgrowth of barnacles. Photo credit: Martina Mayk (2020)."}
 knitr::include_graphics("../plots/recent_photos.png")
 ```
