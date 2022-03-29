@@ -1,4 +1,5 @@
 .Rhistory
 *.pdf
 *.PDF
+.DS_Store
 imp_func.R
