@@ -100,5 +100,6 @@ appraise(gamm_threshold$gam)
 draw(gamm_threshold$gam)
 summary(gamm_threshold$gam)
 
-# Export model -------------------------------------------------------
+# Export data ----------------------------------------------------
+write.csv(df_sea_year, "data/env/calc_threshold_data.csv", row.names = FALSE)
 saveRDS(gamm_threshold, "data/env/GAMM_calcification_windows.rds")
