@@ -275,7 +275,8 @@ ggarrange(
   labels = c("(a)", "(b)"),
   align = "hv",
   font.label = list(size = 11,
-                    family = "Times"),
+                    family = "Times",
+                    face = "plain"),
   common.legend = TRUE,
   legend = "bottom"
 )

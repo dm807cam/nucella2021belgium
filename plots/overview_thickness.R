@@ -15,7 +15,10 @@ nucella_shape <- read_delim("data/shell/shell_shape.csv")
 nucella_shape$location[nucella_shape$location == "OST"] <- "OOS"
 
 # Make overview plot for measured shell parameters ------------------------
-p1 <- ggplot(nucella_shape, aes(year, aperture_ellipses, colour=location)) + 
+p1 <- nucella_shape %>% 
+  mutate(location = fct_relevel(location, 
+                                "OOS", "BLA", "ZEE", "DUI", "KNO", "ZWA", "ZOU")) %>%
+  ggplot(aes(year, aperture_ellipses, colour=location)) + 
   geom_point(pch=21) + 
   geom_smooth(method="loess", span=3, colour="red", se=F, size= 0.5) +
   geom_smooth(subset(nucella_shape, location =="ZEE"), mapping=aes(year, aperture_ellipses),method="loess", span=3, se=F, size= 0.5) +
@@ -26,7 +29,10 @@ p1 <- ggplot(nucella_shape, aes(year, aperture_ellipses, colour=location)) +
   ylab(label = expression(paste(Aperture ~ size ~ "(" * mm ^ 2 * ")"))) + 
   scale_color_jco()
 
-p2 <- ggplot(nucella_shape, aes(shell_height, aperture_ellipses, colour=location)) + 
+p2 <- nucella_shape %>% 
+  mutate(location = fct_relevel(location, 
+                                "OOS", "BLA", "ZEE", "DUI", "KNO", "ZWA", "ZOU")) %>%
+  ggplot(aes(shell_height, aperture_ellipses, colour=location)) + 
   geom_point(pch=21) + 
   geom_smooth(method="loess", span=3, colour="red", se=F, size= 0.5) +
   geom_smooth(subset(nucella_shape, location =="ZEE"), mapping=aes(shell_height, aperture_ellipses),method="loess", span=3, se=F, size= 0.5) +
@@ -46,7 +52,10 @@ p3 <- nucella_shape %>%
         legend.position="none", axis.title = element_blank()) +
   scale_color_jco()
 
-p4 <- ggplot(nucella_shape, aes(year, calcite_thickness_mm, colour=location)) + 
+p4 <- nucella_shape %>% 
+  mutate(location = fct_relevel(location, 
+                                "OOS", "BLA", "ZEE", "DUI", "KNO", "ZWA", "ZOU")) %>%
+  ggplot(aes(year, calcite_thickness_mm, colour=location)) + 
   geom_point(pch=21)+ 
   geom_smooth(method="loess", span=3, colour="red", se=F, size= 0.5) +
   geom_smooth(subset(nucella_shape, location =="ZEE"), mapping=aes(year, calcite_thickness_mm),method="loess", span=3, se=F, size= 0.5) +
@@ -56,7 +65,10 @@ p4 <- ggplot(nucella_shape, aes(year, calcite_thickness_mm, colour=location)) +
   ylab(label = expression(paste(Calcite ~ layer ~ "(" * mm * ")"))) + 
   scale_color_jco()
 
-p5 <- ggplot(nucella_shape, aes(shell_height, calcite_thickness_mm, colour=location)) + 
+p5 <- nucella_shape %>% 
+  mutate(location = fct_relevel(location, 
+                                "OOS", "BLA", "ZEE", "DUI", "KNO", "ZWA", "ZOU")) %>%
+  ggplot(aes(shell_height, calcite_thickness_mm, colour=location)) + 
   geom_point(pch=21) + 
   geom_smooth(method="loess", span=3, colour="red", se=F, size= 0.5) +  
   geom_smooth(subset(nucella_shape, location =="ZEE"), mapping=aes(shell_height, calcite_thickness_mm),method="loess", span=3, se=F, size= 0.5) +
@@ -74,7 +86,10 @@ p6 <- nucella_shape %>%
         legend.position="none", axis.title = element_blank()) +
   scale_color_jco()
 
-p7 <- ggplot(nucella_shape, aes(year, aragonite_thickness_mm, colour=location)) + 
+p7 <- nucella_shape %>% 
+  mutate(location = fct_relevel(location, 
+                                "OOS", "BLA", "ZEE", "DUI", "KNO", "ZWA", "ZOU")) %>%
+  ggplot(aes(year, aragonite_thickness_mm, colour=location)) + 
   geom_point(pch=21) +  
   geom_smooth(method="loess", span=3, colour="red", se=F, size= 0.5) +
   geom_smooth(subset(nucella_shape, location =="ZEE"), mapping=aes(year, aragonite_thickness_mm),method="loess", span=3, se=F, size= 0.5) +
@@ -85,7 +100,10 @@ p7 <- ggplot(nucella_shape, aes(year, aragonite_thickness_mm, colour=location)) 
   xlab("sampling year") +
   scale_color_jco()
 
-p8 <- ggplot(nucella_shape, aes(shell_height, aragonite_thickness_mm, colour=location)) + 
+p8 <- nucella_shape %>% 
+  mutate(location = fct_relevel(location, 
+                                "OOS", "BLA", "ZEE", "DUI", "KNO", "ZWA", "ZOU")) %>%
+  ggplot(aes(shell_height, aragonite_thickness_mm, colour=location)) + 
   geom_point(pch=21) + 
   geom_smooth(method="loess", span=3, colour="red", se=F, size= 0.5) +
   geom_smooth(subset(nucella_shape, location =="ZEE"), mapping=aes(shell_height, aragonite_thickness_mm),method="loess", span=3, se=F, size= 0.5) +

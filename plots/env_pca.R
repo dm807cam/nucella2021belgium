@@ -37,7 +37,8 @@ p1 <- fviz_pca_biplot(
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   )
 
 p2 <- fviz_pca_biplot(
@@ -61,7 +62,8 @@ p2 <- fviz_pca_biplot(
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   )
 
 p3 <- fviz_pca_biplot(
@@ -85,11 +87,16 @@ p3 <- fviz_pca_biplot(
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   )
 
 png("plots/env_pca.png", width = 210, height = 80, unit = "mm", res = 1200)
-
 p1 + p2 + p3
+dev.off()
 
+# Export to vector for journal publication
+library(Cairo)
+cairo_ps("plots/env_pca.eps", family = "Times", width = 210/25.4, height = 80/25.4)
+p1 + p2 + p3
 dev.off()

@@ -109,8 +109,11 @@ sig <- mod_tab %>%
 
 
 png("plots/global_gam_corr.png", width = 90, height = 80, unit = "mm", res = 1200)
-
 (dev_expl/sig) + plot_layout(height = c(0.13,1))
-
 dev.off()
 
+# Export to vector for journal publication
+library(Cairo)
+cairo_ps("plots/global_gam_corr.eps", family = "Times", width = 90/25.4, height = 80/25.4)
+(dev_expl/sig) + plot_layout(height = c(0.13,1))
+dev.off()

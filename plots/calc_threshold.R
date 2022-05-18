@@ -61,7 +61,8 @@ p1 <-
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   ) +
   geom_point(df_sea_year, mapping=aes(year, days, colour=calc_threshold), pch=21, alpha=0.7) +
   geom_line(colour = "black",
@@ -137,7 +138,8 @@ p2 <- ggplot() +
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   ) +
   geom_col(
     ext_pred_sea,
@@ -168,7 +170,12 @@ p2 <- ggplot() +
   scale_x_continuous(name = "Temperature threshold (°C)", breaks = c(10:15))
 
 png("plots/calc_threshold.png", width = 90, height = 160, unit = "mm", res = 1200)
-
 p1/p2
-
 dev.off()
+
+# Export to vector for journal publication
+library(Cairo)
+cairo_ps("plots/calc_threshold.eps", family = "Times", width = 90/25.4, height = 160/25.4)
+p1/p2
+dev.off()
+

@@ -131,7 +131,11 @@ p3 <- ggplot(predframe_aragonite, aes(year, exp(pred_aragonite))) +
   scale_y_continuous(name = expression(paste(Aragonite ~ layer ~ "(" * mm * ")")), limits = c(0.5 / coeff_arag, 1.3 / coeff_arag))
 
 png("plots/shell_gam.png", width = 120, height = 80, unit = "mm", res = 1200)
-
 (p3 + p2)  + plot_layout(widths = c(0.05,1))
+dev.off()
 
+# Export to vector for journal publication
+library(Cairo)
+cairo_ps("plots/shell_gam.eps", family = "Times", width = 120/25.4, height = 80/25.4)
+(p3 + p2)  + plot_layout(widths = c(0.05,1))
 dev.off()

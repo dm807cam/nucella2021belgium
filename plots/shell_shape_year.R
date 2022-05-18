@@ -277,3 +277,24 @@ grid.text("n.s.", x = 0.88, y = 0.385, gp=gpar(fontsize=10, fontfamily = "Times"
 grid.text("n.s.", x = 0.88, y = 0.195, gp=gpar(fontsize=10, fontfamily = "Times"))
 
 dev.off()
+
+# Export to vector for journal publication
+library(Cairo)
+cairo_ps("plots/shell_shape_year.eps", family = "Times", width = 80/25.4, height = 180/25.4)
+(pc_panel_l | eff_panel_r) + plot_layout(widths = c(0.6,1))
+
+grid.text("(a)", x = 0.075, y = 0.96, gp=gpar(fontsize=10, fontfamily = "Times"))
+grid.text("(b)", x = 0.075, y = 0.77, gp=gpar(fontsize=10, fontfamily = "Times"))
+grid.text("(c)", x = 0.075, y = 0.575, gp=gpar(fontsize=10, fontfamily = "Times"))
+grid.text("(d)", x = 0.075, y = 0.385, gp=gpar(fontsize=10, fontfamily = "Times"))
+grid.text("(e)", x = 0.075, y = 0.195, gp=gpar(fontsize=10, fontfamily = "Times"))
+
+summary(gam_PCs)
+
+grid.text("n.s.", x = 0.88, y = 0.96, gp=gpar(fontsize=10, fontfamily = "Times"))
+grid.text("*", x = 0.88, y = 0.758, gp=gpar(fontsize=10, fontfamily = "Times"))
+grid.text("n.s.", x = 0.88, y = 0.58, gp=gpar(fontsize=10, fontfamily = "Times"))
+grid.text("n.s.", x = 0.88, y = 0.385, gp=gpar(fontsize=10, fontfamily = "Times"))
+grid.text("n.s.", x = 0.88, y = 0.195, gp=gpar(fontsize=10, fontfamily = "Times"))
+
+dev.off()

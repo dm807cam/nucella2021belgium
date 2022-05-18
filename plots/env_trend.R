@@ -125,7 +125,8 @@ ATY <- ggplot() +
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   ) +
   theme_science() +
   scale_fill_grey(start = 0.2,
@@ -166,7 +167,8 @@ ATC <- ggplot(pdatAT, aes(year,
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   ) +
   theme_science() +
   scale_fill_grey(start = 0.2,
@@ -271,7 +273,8 @@ STY <- ggplot() +
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   ) +
   theme_science() +
   scale_fill_grey(start = 0.2,
@@ -311,7 +314,8 @@ STC <- ggplot(pdatST, aes(year,
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   ) +
   theme_science() +
   scale_fill_grey(start = 0.2,
@@ -404,7 +408,8 @@ WSY <- ggplot() +
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   ) +
   theme_science() +
   scale_fill_grey(start = 0.2, end = 0.8) +
@@ -442,7 +447,8 @@ WSC <- ggplot(pdatWS, aes(year, p2)) +
     vjust = 1.5,
     hjust = -.25,
     parse = TRUE,
-    size = 3
+    size = 3,
+    family = "Times"
   ) +
   theme_science() +
   scale_fill_grey(start = 0.2, end = 0.8) +
@@ -458,7 +464,11 @@ WSC <- ggplot(pdatWS, aes(year, p2)) +
   scale_x_continuous(expand = c(0.015, 0.015), breaks = pretty_breaks(n = 6))
 
 png("plots/env_trend.png", width = 210, height = 110, unit = "mm", res = 1200)
-
 (ATC + STC + WSC) / (ATY + STY + WSY) + plot_layout(height = c(0.6,1))
+dev.off()
 
+# Export to vector for journal publication
+library(Cairo)
+cairo_ps("plots/env_trend.eps", family = "Times", width = 210/25.4, height = 110/25.4)
+(ATC + STC + WSC) / (ATY + STY + WSY) + plot_layout(height = c(0.6,1))
 dev.off()
