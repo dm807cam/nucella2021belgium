@@ -1,4 +1,5 @@
 .Rhistory
+.RData
 *.pdf
 *.PDF
 .DS_Store
